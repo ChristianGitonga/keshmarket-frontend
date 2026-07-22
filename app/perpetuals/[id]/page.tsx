@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { TradePanel } from "../../TradePanel";
 import { TradingDashboard } from "../../TradingDashboard";
+import { LiquidationHeatmap } from "../../LiquidationHeatmap";
 import { MARKETS } from "../../../contracts/addresses";
 import Link from "next/link";
 
@@ -33,6 +34,7 @@ export default function PerpetualDetailPage() {
       <div className="w-full flex flex-col items-center gap-6">
         <TradingDashboard />
         <TradePanel initialMarketId={market.id} />
+        <LiquidationHeatmap marketAddress={market.address as `0x${string}`} />
       </div>
     </main>
   );
