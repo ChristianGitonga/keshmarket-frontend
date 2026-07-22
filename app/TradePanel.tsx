@@ -5,9 +5,10 @@ import { useState } from "react";
 import PerpMarketArtifact from "../contracts/PerpMarket.json";
 import { MARKETS } from "../contracts/addresses";
 
-export function TradePanel() {
+export function TradePanel({ initialMarketId }: { initialMarketId?: string }) {
   const { address, isConnected } = useAccount();
-  const [marketIndex, setMarketIndex] = useState(0);
+  const initialIndex = MARKETS.findIndex((m) => m.id === initialMarketId);
+  const [marketIndex, setMarketIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
   const [margin, setMargin] = useState("50");
   const [leverage, setLeverage] = useState(5);
 

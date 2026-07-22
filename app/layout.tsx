@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { ConnectWallet } from "./ConnectWallet";
+import Link from "next/link";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
@@ -33,7 +35,15 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-[#0F1113] text-[#EDEAE2] font-body antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          <header className="flex items-center justify-between px-8 py-4 border-b border-[#2A2E33]">
+            <Link href="/" className="text-xl font-display font-bold tracking-tight text-[#EDEAE2]">
+              Kesh<span className="text-[#C9A24B]">Market</span>
+            </Link>
+            <ConnectWallet />
+          </header>
+          {children}
+        </Providers>
       </body>
     </html>
   );

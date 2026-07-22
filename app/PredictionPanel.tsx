@@ -16,6 +16,14 @@ export function PredictionPanel() {
     functionName: "question",
   });
 
+  const { data: adminAddress } = useReadContract({
+    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    abi: PredictionMarketArtifact.abi,
+    functionName: "admin",
+  });
+
+  const isAdmin = address && adminAddress && address.toLowerCase() === (adminAddress as string).toLowerCase();
+
   const { data: yesPrice } = useReadContract({
     address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
     abi: PredictionMarketArtifact.abi,
@@ -69,6 +77,9 @@ export function PredictionPanel() {
   const { writeContract: redeem, data: redeemHash } = useWriteContract();
   const { isLoading: redeemPending } = useWaitForTransactionReceipt({ hash: redeemHash });
 
+  const { writeContract: resolveMarket, data: resolveHash } = useWriteContract();
+  const { isLoading: resolvePending } = useWaitForTransactionReceipt({ hash: resolveHash });
+
   const handleApprove = () => {
     const amt = BigInt(Math.floor(Number(amount) * 1e18));
     approve({
@@ -97,6 +108,16 @@ export function PredictionPanel() {
       abi: PredictionMarketArtifact.abi,
       functionName: "redeem",
       args: [],
+      gas: 500000n,
+    });
+  };
+
+  const handleResolve = (isYes: boolean) => {
+    resolveMarket({
+      address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+      abi: PredictionMarketArtifact.abi,
+      functionName: "resolveMarket",
+      args: [isYes],
       gas: 500000n,
     });
   };
@@ -206,6 +227,30 @@ export function PredictionPanel() {
               {buyPending ? "Buying..." : "Buy NO"}
             </button>
           </div>
+
+          {isAdmin && (
+            <div className="mt-5 pt-5 border-t border-[#2A2E33]">
+              <div className="text-xs text-[#C9A24B] font-body mb-2 uppercase tracking-wide">
+                Admin: Resolve Market
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleResolve(true)}
+                  disabled={resolvePending}
+                  className="flex-1 px-3 py-2 font-body text-sm bg-[#0F1113] border border-[#1E7F4C] text-[#1E7F4C] rounded hover:bg-[#1E7F4C] hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {resolvePending ? "Resolving..." : "Resolve YES"}
+                </button>
+                <button
+                  onClick={() => handleResolve(false)}
+                  disabled={resolvePending}
+                  className="flex-1 px-3 py-2 font-body text-sm bg-[#0F1113] border border-[#A2222E] text-[#A2222E] rounded hover:bg-[#A2222E] hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {resolvePending ? "Resolving..." : "Resolve NO"}
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
