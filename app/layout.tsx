@@ -36,7 +36,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-[#0F1113] text-[#EDEAE2] font-body antialiased">
         <Providers>
-          <header className="flex items-center justify-between px-8 py-4 border-b border-[#2A2E33]">
+          <header className="flex items-center justify-between px-4 sm:px-8 py-4 border-b border-[#2A2E33]">
             <Link href="/" className="text-xl font-display font-bold tracking-tight text-[#EDEAE2]">
               Kesh<span className="text-[#C9A24B]">Market</span>
             </Link>

@@ -33,7 +33,7 @@ function PredictionCard({ market }: { market: (typeof PREDICTION_MARKETS)[number
   return (
     <Link
       href={`/predictions/${market.id}`}
-      className="kesh-card p-6 flex flex-col hover:border-[#C9A24B] transition-colors"
+      className="kesh-card p-5 sm:p-6 flex flex-col hover:border-[#C9A24B] transition-colors fade-in-delay-1"
     >
       <span className="text-sm text-[#EDEAE2] font-body mb-4">
         {(question as string) || "Loading..."}
@@ -57,8 +57,8 @@ function PredictionCard({ market }: { market: (typeof PREDICTION_MARKETS)[number
 
 export default function PredictionsPage() {
   return (
-    <main className="flex flex-1 flex-col items-center px-8 py-16">
-      <div className="max-w-xl text-center mb-10">
+   <main className="flex flex-1 flex-col items-center px-4 sm:px-8 py-10 sm:py-16">
+      <div className="max-w-xl text-center mb-10 fade-in">
         <h2 className="text-2xl font-display font-semibold text-[#EDEAE2] mb-2">
           Prediction Markets
         </h2>

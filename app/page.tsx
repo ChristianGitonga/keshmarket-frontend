@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-8 py-16">
-      <div className="max-w-xl text-center mb-14">
+    <main className="flex flex-1 flex-col items-center justify-center px-4 sm:px-8 py-10 sm:py-16">
+      <div className="max-w-xl text-center mb-10 sm:mb-14 fade-in">
         <h2 className="text-3xl font-display font-semibold text-[#EDEAE2] mb-3">
           Leveraged Trading for Kenyan Markets
         </h2>
@@ -11,11 +11,10 @@ export default function Home() {
           Choose a market to get started.
         </p>
       </div>
-
-      <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <Link
           href="/perpetuals"
-          className="kesh-card p-8 flex flex-col items-start hover:border-[#C9A24B] transition-colors group"
+          className="kesh-card p-6 sm:p-8 flex flex-col items-start hover:border-[#C9A24B] transition-colors group fade-in-delay-1"
         >
           <span className="text-xs font-body text-[#8B9198] uppercase tracking-wide mb-3">
             Leverage · 1x–20x
@@ -30,10 +29,9 @@ export default function Home() {
             View Markets →
           </span>
         </Link>
-
         <Link
           href="/predictions"
-          className="kesh-card p-8 flex flex-col items-start hover:border-[#C9A24B] transition-colors group"
+          className="kesh-card p-6 sm:p-8 flex flex-col items-start hover:border-[#C9A24B] transition-colors group fade-in-delay-2"
         >
           <span className="text-xs font-body text-[#8B9198] uppercase tracking-wide mb-3">
             Binary Outcomes
