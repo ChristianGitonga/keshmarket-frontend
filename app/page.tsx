@@ -1,6 +1,7 @@
 import { ConnectWallet } from "./ConnectWallet";
 import { TradingDashboard } from "./TradingDashboard";
 import { TradePanel } from "./TradePanel";
+import { PredictionPanel } from "./PredictionPanel";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
         <div className="w-full flex flex-col items-center gap-6">
           <TradingDashboard />
           <TradePanel />
+          <PredictionPanel />
         </div>
       </main>
     </div>
