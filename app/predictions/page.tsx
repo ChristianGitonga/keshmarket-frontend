@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { useReadContract } from "wagmi";
 import PredictionMarketArtifact from "../../contracts/PredictionMarket.json";
-import { PREDICTION_MARKET_ADDRESS } from "../../contracts/addresses";
-
-// For now there's a single prediction market. This array-style structure
-// makes it easy to add more later without restructuring the page.
-const PREDICTION_MARKETS = [
-  { id: "kes-usd", address: PREDICTION_MARKET_ADDRESS },
-];
+import { PREDICTION_MARKETS } from "../../contracts/addresses";
 
 function PredictionCard({ market }: { market: (typeof PREDICTION_MARKETS)[number] }) {
   const { data: question } = useReadContract({
@@ -33,7 +27,7 @@ function PredictionCard({ market }: { market: (typeof PREDICTION_MARKETS)[number
   return (
     <Link
       href={`/predictions/${market.id}`}
-      className="kesh-card p-5 sm:p-6 flex flex-col hover:border-[#C9A24B] transition-colors fade-in-delay-1"
+      className="kesh-card p-5 sm:p-6 flex flex-col hover:border-[#C9A24B] transition-colors"
     >
       <span className="text-sm text-[#EDEAE2] font-body mb-4">
         {(question as string) || "Loading..."}
@@ -57,7 +51,7 @@ function PredictionCard({ market }: { market: (typeof PREDICTION_MARKETS)[number
 
 export default function PredictionsPage() {
   return (
-   <main className="flex flex-1 flex-col items-center px-4 sm:px-8 py-10 sm:py-16">
+    <main className="flex flex-1 flex-col items-center px-4 sm:px-8 py-10 sm:py-16">
       <div className="max-w-xl text-center mb-10 fade-in">
         <h2 className="text-2xl font-display font-semibold text-[#EDEAE2] mb-2">
           Prediction Markets
@@ -67,9 +61,11 @@ export default function PredictionsPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {PREDICTION_MARKETS.map((market) => (
-          <PredictionCard key={market.id} market={market} />
+      <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        {PREDICTION_MARKETS.map((market, i) => (
+          <div key={market.id} className={i < 2 ? "fade-in-delay-1" : "fade-in-delay-2"}>
+            <PredictionCard market={market} />
+          </div>
         ))}
       </div>
     </main>

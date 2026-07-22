@@ -4,20 +4,20 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { useState } from "react";
 import PredictionMarketArtifact from "../contracts/PredictionMarket.json";
 import MockUSDCArtifact from "../contracts/MockUSDC.json";
-import { PREDICTION_MARKET_ADDRESS, MOCK_USDC_ADDRESS } from "../contracts/addresses";
+import { MOCK_USDC_ADDRESS } from "../contracts/addresses";
 
-export function PredictionPanel() {
+export function PredictionPanel({ marketAddress }: { marketAddress: `0x${string}` }) {
   const { address, isConnected } = useAccount();
   const [amount, setAmount] = useState("50");
 
   const { data: question } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "question",
   });
 
   const { data: adminAddress } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "admin",
   });
@@ -25,35 +25,35 @@ export function PredictionPanel() {
   const isAdmin = address && adminAddress && address.toLowerCase() === (adminAddress as string).toLowerCase();
 
   const { data: yesPrice } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "getYesPrice",
     query: { refetchInterval: 3000 },
   });
 
   const { data: noPrice } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "getNoPrice",
     query: { refetchInterval: 3000 },
   });
 
   const { data: resolved } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "resolved",
     query: { refetchInterval: 3000 },
   });
 
   const { data: outcome } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "outcome",
     query: { enabled: !!resolved },
   });
 
   const { data: myYesShares } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "yesShares",
     args: [address],
@@ -61,7 +61,7 @@ export function PredictionPanel() {
   });
 
   const { data: myNoShares } = useReadContract({
-    address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PredictionMarketArtifact.abi,
     functionName: "noShares",
     args: [address],
@@ -86,7 +86,7 @@ export function PredictionPanel() {
       address: MOCK_USDC_ADDRESS as `0x${string}`,
       abi: MockUSDCArtifact.abi,
       functionName: "approve",
-      args: [PREDICTION_MARKET_ADDRESS, amt],
+      args: [marketAddress, amt],
       gas: 500000n,
     });
   };
@@ -94,7 +94,7 @@ export function PredictionPanel() {
   const handleBuy = (isYes: boolean) => {
     const amt = BigInt(Math.floor(Number(amount) * 1e18));
     buyShares({
-      address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+      address: marketAddress,
       abi: PredictionMarketArtifact.abi,
       functionName: "buyShares",
       args: [isYes, amt],
@@ -104,7 +104,7 @@ export function PredictionPanel() {
 
   const handleRedeem = () => {
     redeem({
-      address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+      address: marketAddress,
       abi: PredictionMarketArtifact.abi,
       functionName: "redeem",
       args: [],
@@ -114,7 +114,7 @@ export function PredictionPanel() {
 
   const handleResolve = (isYes: boolean) => {
     resolveMarket({
-      address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
+      address: marketAddress,
       abi: PredictionMarketArtifact.abi,
       functionName: "resolveMarket",
       args: [isYes],
