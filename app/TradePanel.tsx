@@ -3,22 +3,26 @@
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { useState } from "react";
 import PerpMarketArtifact from "../contracts/PerpMarket.json";
-import { PERP_MARKET_ADDRESS } from "../contracts/addresses";
+import { MARKETS } from "../contracts/addresses";
 
 export function TradePanel() {
   const { address, isConnected } = useAccount();
+  const [marketIndex, setMarketIndex] = useState(0);
   const [margin, setMargin] = useState("50");
   const [leverage, setLeverage] = useState(5);
 
+  const market = MARKETS[marketIndex];
+  const marketAddress = market.address as `0x${string}`;
+
   const { data: markPrice } = useReadContract({
-    address: PERP_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PerpMarketArtifact.abi,
     functionName: "getMarkPrice",
     query: { refetchInterval: 3000 },
   });
 
   const { data: position } = useReadContract({
-    address: PERP_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PerpMarketArtifact.abi,
     functionName: "positions",
     args: [address],
@@ -26,7 +30,7 @@ export function TradePanel() {
   });
 
   const { data: pnl } = useReadContract({
-    address: PERP_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PerpMarketArtifact.abi,
     functionName: "getPnl",
     args: [address],
@@ -34,7 +38,7 @@ export function TradePanel() {
   });
 
   const { data: liquidationPrice } = useReadContract({
-    address: PERP_MARKET_ADDRESS as `0x${string}`,
+    address: marketAddress,
     abi: PerpMarketArtifact.abi,
     functionName: "getLiquidationPrice",
     args: [address],
@@ -52,19 +56,21 @@ export function TradePanel() {
   const handleOpen = (isLong: boolean) => {
     const marginAmount = BigInt(Math.floor(Number(margin) * 1e18));
     openPosition({
-      address: PERP_MARKET_ADDRESS as `0x${string}`,
+      address: marketAddress,
       abi: PerpMarketArtifact.abi,
       functionName: "openPosition",
       args: [isLong, marginAmount, BigInt(leverage)],
+      gas: 500000n,
     });
   };
 
   const handleClose = () => {
     closePosition({
-      address: PERP_MARKET_ADDRESS as `0x${string}`,
+      address: marketAddress,
       abi: PerpMarketArtifact.abi,
       functionName: "closePosition",
       args: [],
+      gas: 500000n,
     });
   };
 
@@ -85,12 +91,28 @@ export function TradePanel() {
 
   return (
     <div className="w-full max-w-md kesh-card p-6">
+      <div className="flex gap-2 mb-5">
+        {MARKETS.map((m, i) => (
+          <button
+            key={m.id}
+            onClick={() => setMarketIndex(i)}
+            className={`flex-1 px-3 py-2 text-sm font-body font-medium rounded border transition-colors ${
+              i === marketIndex
+                ? "bg-[#C9A24B] text-[#0F1113] border-[#C9A24B]"
+                : "bg-[#0F1113] text-[#8B9198] border-[#2A2E33] hover:border-[#C9A24B]"
+            }`}
+          >
+            {m.symbol}
+          </button>
+        ))}
+      </div>
+
       <div className="flex justify-between items-center mb-5 pb-5 border-b border-[#2A2E33]">
         <div>
           <span className="font-display text-sm font-semibold tracking-wide text-[#8B9198] uppercase block mb-1">
-            SCOM-PERP
+            {market.symbol}
           </span>
-          <span className="text-xs text-[#8B9198] font-body">Safaricom Synthetic</span>
+          <span className="text-xs text-[#8B9198] font-body">{market.label}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="pulse-dot" />

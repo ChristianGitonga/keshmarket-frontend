@@ -41,6 +41,7 @@ export function TradingDashboard() {
       abi: MockUSDCArtifact.abi,
       functionName: "faucet",
       args: [1000n * 10n ** 18n],
+      gas: 500000n,
     });
   };
 
@@ -51,6 +52,7 @@ export function TradingDashboard() {
       abi: MockUSDCArtifact.abi,
       functionName: "approve",
       args: [VAULT_ADDRESS, amount],
+      gas: 500000n,
     });
   };
 
@@ -61,6 +63,7 @@ export function TradingDashboard() {
       abi: VaultArtifact.abi,
       functionName: "deposit",
       args: [amount],
+      gas: 500000n,
     });
   };
 
